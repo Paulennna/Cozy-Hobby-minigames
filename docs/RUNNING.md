@@ -89,3 +89,24 @@ EXPO_OFFLINE=1 npx expo install --check
 Offline checks do not verify the installed Expo Go binary or the latest React Native Directory metadata. The cloud used offline Expo commands because its proxy blocked Expo APIs. Mac commands above do not require the cloud's temporary npm cache or telemetry settings.
 
 Native simulator builds and real iPhone use still need to be tested on your Mac. Use [the checklist](TESTING.md). No cloud localhost preview link is needed.
+
+## Simulator crashes immediately: scene lifecycle
+
+If the crash report contains `UIApplicationEvaluateRuntimeIssueForNoSceneLifecycleAdoption`, iOS has rejected the native app's old window lifecycle. SDK 57 includes `ExpoAppSceneDelegate`, but the published bare template 57.0.30 still starts React Native from AppDelegate and has no scene manifest. Expo's current upstream template has migrated to scenes.
+
+`plugins/withIosSceneLifecycle.js` makes that migration when Expo generates the native project. It registers Expo's built-in `EXExpoAppSceneDelegate` and makes AppDelegate supply its React Native factory. It needs no additional runtime dependency or Swift file. The plugin fails clearly if a future template uses an unfamiliar startup pattern.
+
+To get the fix in a Git clone of the `cozy-room-prototype` branch, stop Metro with Control+C, then run these commands one at a time from the project folder:
+
+```sh
+git pull --ff-only
+npm ci
+npx expo prebuild --platform ios
+npx expo run:ios
+```
+
+Prebuild recreates the generated `ios/` folder. If you manually edited native Xcode files, copy that folder to a separate backup location first. Your drawings and game source live outside `ios/`. Updating JavaScript or restarting Metro alone cannot change an already installed native app; the rebuild is required. A ZIP copy has no Git history; download the updated branch into a new folder instead of using `git pull`.
+
+Validation in the cloud: strict TypeScript, 13 tests, and an iOS JavaScript export pass. An actual Expo prebuild using the published 57.0.30 template generated the scene manifest and factory-provider AppDelegate; a repeat with `--no-clean` preserved the result. These are generation checks, not native Swift compilation or an iOS launch. The Simulator launch still needs to be verified on your Mac.
+
+Upstream references: [AppDelegate](https://github.com/expo/expo/blob/main/templates/expo-template-bare-minimum/ios/HelloWorld/AppDelegate.swift), [scene manifest](https://github.com/expo/expo/blob/main/templates/expo-template-bare-minimum/ios/HelloWorld/Info.plist), and [Expo scene delegate](https://github.com/expo/expo/blob/main/packages/expo/ios/AppDelegates/ExpoAppSceneDelegate.swift).

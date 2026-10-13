@@ -48,7 +48,9 @@ Run these checks on an iPhone or iOS Simulator. Automated tests cannot verify na
 ## Automated checks
 
 - `npm run typecheck`: strict TypeScript, including tests.
-- `npm test`: nine tests covering crochet rules/completion/replay, deck contents/shuffle, matching rules, rapid taps, stale hide events after replay, and room bounds at four widths.
+- `npm test`: 13 tests covering crochet rules/completion/replay, deck contents/shuffle, matching rules, rapid taps, stale hide events after replay, room bounds at four widths, and the iOS scene-lifecycle migration.
 - `npm run bundle:ios`: production JavaScript export for iOS, including asset resolution.
 
 The tests exercise pure game transitions. Timer timing/cleanup, rendered screen navigation, actual press feedback, and native display are manual checks, not claims made by the reducer tests.
+
+- [ ] After applying the scene-lifecycle fix and rebuilding, the Simulator launches Cozy Room without a `NoSceneLifecycleAdoption` crash.

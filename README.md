@@ -41,3 +41,5 @@ Tests exercise game rules, completion, replay, rapid taps, stale timer events, a
 - [Manual testing checklist](docs/TESTING.md): navigation, replay, timers, and screen sizes.
 
 The only runtime dependencies beyond the official blank template are `react-native-safe-area-context` for iPhone notch protection. Navigation is one state variable in `App.tsx`; game screens own their own progress. Assets are optional: the project runs with clearly labeled placeholders.
+
+If the Simulator closes immediately with a scene-lifecycle error, see the [rebuild instructions](docs/RUNNING.md#simulator-crashes-immediately-scene-lifecycle).

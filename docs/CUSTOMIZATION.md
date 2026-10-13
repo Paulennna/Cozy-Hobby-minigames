@@ -5,6 +5,7 @@
 | File | What it controls |
 | --- | --- |
 | `App.tsx` | Switches between menu, room, crochet, and matching using one `screen` state variable. Unmounting a game clears its local state. |
+| `plugins/withIosSceneLifecycle.js` | Native iOS startup compatibility fix, applied automatically by Expo prebuild. Leave this alone when customizing game art. |
 | `index.ts` | Expo entry point; registers `App`. Usually leave it alone. |
 | `app.json` | App name, portrait orientation, light appearance, and iOS app identifier. |
 | `src/config/theme.ts` | Shared colors, text styles, and panel styling. |
